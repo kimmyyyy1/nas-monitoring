@@ -21,17 +21,19 @@ WORKDIR /var/www
 # 5. Copy files
 COPY . .
 
-# --- ITO ANG IMPORTANTE: Gumawa ng .env file bago mag-install ---
+# 6. Create .env file (Need ito para sa build process)
 RUN cp .env.example .env
 
-# 6. Install Laravel libraries
+# 7. Install Laravel libraries
 RUN composer install --no-dev --optimize-autoloader
 
-# 7. Generate key
+# 8. Generate key
 RUN php artisan key:generate
 
-# 8. Expose port 10000
+# 9. Expose port 10000
 EXPOSE 10000
 
-# 9. Start the application
-CMD php artisan serve --host=0.0.0.0 --port=10000
+# 10. Start the application (ITO ANG BINAGO NATIN)
+# Nilagyan natin ng 'config:clear' para siguradong basahin niya ang Render Environment Variables
+# Nilagyan din natin ng 'migrate --force' para automatic na gumawa ng tables
+CMD sh -c "php artisan config:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=10000"
