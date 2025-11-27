@@ -1,30 +1,34 @@
 FROM php:8.2-cli
 
-# Install dependencies
+# 1. Install dependencies (kailangan ito para sa Database at Laravel)
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
     git \
-    curl
+    curl \
+    libpq-dev 
 
-# Install Composer
+# 2. Install PHP Extensions (lalo na ang pdo_pgsql para sa Render Database)
+RUN docker-php-ext-install pdo pdo_pgsql zip
+
+# 3. Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
+# 4. Set working directory
 WORKDIR /var/www
 
-# Copy existing application directory contents
+# 5. Copy files
 COPY . .
 
-# Install PHP dependencies
+# 6. Install Laravel libraries
 RUN composer install --no-dev --optimize-autoloader
 
-# Generate key (optional sa build, pero good practice)
+# 7. Generate key (optional sa build)
 RUN php artisan key:generate
 
-# Expose port 10000 (Standard port ni Render)
+# 8. Expose port 10000 (Standard port ni Render)
 EXPOSE 10000
 
-# Start the application
+# 9. Start the application
 CMD php artisan serve --host=0.0.0.0 --port=10000

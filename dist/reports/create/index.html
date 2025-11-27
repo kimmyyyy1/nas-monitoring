@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OC No. 1 - Learning Standards (Form & Dashboard)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* --- BAGONG STYLES PARA SA SIDEBAR LAYOUT --- */
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; /* Alisin ang margin */
+            background-color: #f4f4f4; 
+        }
+        
+        /* Ang Sidebar Menu */
+        .sidebar {
+            position: fixed; /* Mananatili ito kahit mag-scroll */
+            left: 0;
+            top: 0;
+            width: 260px; /* Lapad ng ating menu */
+            height: 100vh; /* Buong taas ng screen */
+            background-color: #2c3e50; /* Mas madilim na kulay */
+            padding: 20px;
+            box-sizing: border-box; /* Para 'wag lumagpas */
+            color: white;
+        }
+        .sidebar h3 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+        .sidebar a {
+            display: block;
+            color: #ecf0f1; /* Light na text */
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+        /* Ito ang style para sa "active" na page */
+        .sidebar a.active {
+            background-color: #007bff; /* Blue */
+            color: white;
+        }
+
+        /* Ang Main Content (Lahat ng nasa kanan ng sidebar) */
+        .main-content {
+            margin-left: 260px; /* I-offset natin para 'wag matakpan ng sidebar */
+            padding: 20px;
+        }
+        /* ----------------------------------------------- */
+
+        h2 { color: #333; text-align: center; }
+        .page-container { display: flex; gap: 20px; max-width: 100%; margin: auto; } /* 100% na ang width */
+        .form-column { flex: 2; min-width: 500px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; }
+        .graph-column { flex: 1; min-width: 400px; }
+        .sticky-wrapper { position: sticky; top: 20px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        form { padding: 0; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { margin-bottom: 5px; font-weight: bold; color: #555; }
+        .form-group select, .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .grid-header { grid-column: 1 / -1; margin-top: 20px; margin-bottom: 0; padding-bottom: 10px; border-bottom: 2px solid #007bff; color: #0056b3; }
+        .success-message { grid-column: 1 / -1; padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; }
+                .sticky-wrapper h3 { margin-top: 0; }
+        .filters { background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .filters select, .filters label { padding: 8px; font-size: 16px; width: 100%; margin-bottom: 10px; }
+        .chart-container { width: 100%; max-width: 400px; margin: auto; }
+        .submit-button-sticky { width: 100%; padding: 12px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; }
+        .submit-button-sticky:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+    <h3>NAS M&E System</h3>
+    
+    <a href="http://localhost" class="">Main Dashboard</a> 
+    <hr style="border-color: #444;">
+    
+    <a href="http://localhost/reports/create" class="active">OC-1: Learning Standards</a>
+    <a href="http://localhost/reports/create-retention" class="">OC-2: Retention Rate</a>
+    <a href="http://localhost/reports/create-medals" class="">OC-3: Medal Tally</a>
+    
+    <a href="http://localhost/reports/create-athletes-trained" class="">OP-2: Athletes Trained</a>
+    <a href="http://localhost/reports/create-program" class="">OP-1: Programs</a>
+    <a href="http://localhost/reports/create-facility" class="">OP-3: Facilities</a>
+    
+    <hr style="border-color: #444;">
+    <a href="http://localhost/reports/bar-report" class="" style="color: #ffd700;">BAR No. 1 Report</a>
+</div>
+
+    <div class="main-content">
+
+        <h2>OC No. 1: Learning Standards (Entry & Monitoring)</h2>
+
+        <form action="http://localhost/reports" method="POST">
+            <input type="hidden" name="_token" value="84Oa35BI9qyjuxtBNt3IYP8D3zCuxYH8bsiRDfXR" autocomplete="off">            
+            <div class="page-container">
+
+                <div class="form-column">
+                    <div class="form-grid">
+
+                                                
+                        
+                        <div class="form-group">
+                            <label for="quarter">Quarter:</label>
+                            <select name="quarter" id="quarter" required>
+                                <option value="">Select Quarter</option>
+                                <option value="1st Quarter">1st Quarter</option>
+                                <option value="2nd Quarter">2nd Quarter</option>
+                                <option value="3rd Quarter">3rd Quarter</option>
+                                <option value="4th Quarter">4th Quarter</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade_level">Grade Level:</label>
+                            <select name="grade_level" id="grade_level" required>
+                                <option value="">Select Grade Level</option>
+                                <option value="Grade 7">Grade 7</option>
+                                <option value="Grade 8">Grade 8</option>
+                                <option value="Grade 9">Grade 9</option>
+                                <option value="Grade 10">Grade 10</option>
+                            </select>
+                        </div>
+
+                        <h3 class="grid-header">Outstanding (90-100)</h3>
+                        <div class="form-group"><label for="outstanding_male">Male Count:</label><input type="number" name="outstanding_male" id="outstanding_male" value="0" required></div>
+                        <div class="form-group"><label for="outstanding_female">Female Count:</label><input type="number" name="outstanding_female" id="outstanding_female" value="0" required></div>
+                        <h3 class="grid-header">Very Satisfactory (85-89)</h3>
+                        <div class="form-group"><label for="very_satisfactory_male">Male Count:</label><input type="number" name="very_satisfactory_male" id="very_satisfactory_male" value="0" required></div>
+                        <div class="form-group"><label for="very_satisfactory_female">Female Count:</label><input type="number" name="very_satisfactory_female" id="very_satisfactory_female" value="0" required></div>
+                        <h3 class="grid-header">Satisfactory (80-84)</h3>
+                        <div class="form-group"><label for="satisfactory_male">Male Count:</label><input type="number" name="satisfactory_male" id="satisfactory_male" value="0" required></div>
+                        <div class="form-group"><label for="satisfactory_female">Female Count:</label><input type="number" name="satisfactory_female" id="satisfactory_female" value="0" required></div>
+                        <h3 class="grid-header">Fairly Satisfactory (75-79)</h3>
+                        <div class="form-group"><label for="fairly_satisfactory_male">Male Count:</label><input type="number" name="fairly_satisfactory_male" id="fairly_satisfactory_male" value="0" required></div>
+                        <div class="form-group"><label for="fairly_satisfactory_female">Female Count:</label><input type="number" name="fairly_satisfactory_female" id="fairly_satisfactory_female" value="0" required></div>
+                        <h3 class="grid-header">Did not Meet Expectations (74 and below)</h3>
+                        <div class="form-group"><label for="did_not_meet_male">Male Count:</label><input type="number" name="did_not_meet_male" id="did_not_meet_male" value="0" required></div>
+                        <div class="form-group"><label for="did_not_meet_female">Female Count:</label><input type="number" name="did_not_meet_female" id="did_not_meet_female" value="0" required></div>
+                        
+                    </div>
+                </div>
+
+                <div class="graph-column">
+                    <div class="sticky-wrapper">
+                        <h3>Performance Statistics</h3>
+
+                        <div class="filters">
+                            <label for="quarter_filter" style="font-weight: bold;">Filter by Quarter:</label>
+                            <select id="quarter_filter" onchange="applyFilters()">
+                                <option value="">All Quarters</option>
+                                                                    <option value="1st Quarter" >
+                                        1st Quarter
+                                    </option>
+                                                            </select>
+                            
+                            <label for="grade_level_filter" style="font-weight: bold;">Filter by Grade Level:</label>
+                            <select id="grade_level_filter" onchange="applyFilters()">
+                                <option value="">All Grade Levels</option>
+                                                                    <option value="Grade 7" >
+                                        Grade 7
+                                    </option>
+                                                            </select>
+                        </div>
+
+                        <div class="chart-container">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                        
+                        <button type="submit" class="submit-button-sticky">Save Report</button>
+                        
+                        <script>
+                            function applyFilters() {
+                                let quarter = document.getElementById('quarter_filter').value;
+                                let grade = document.getElementById('grade_level_filter').value;
+                                let url = `http://localhost/reports/create?quarter=${encodeURIComponent(quarter)}&grade_level=${encodeURIComponent(grade)}`;
+                                window.location.href = url;
+                            }
+                        
+                            const chartData = {"labels":["Outstanding","Very Satisfactory","Satisfactory","Fairly Satisfactory","Did not Meet"],"data":[4,2,2,3,0]};
+                            const ctx = document.getElementById('myChart').getContext('2d');
+                            const myChart = new Chart(ctx, {
+                                type: 'pie',
+                                data: {
+                                    labels: chartData.labels,
+                                    datasets: [{
+                                        label: 'Number of Students',
+                                        data: chartData.data,
+                                        backgroundColor: ['rgba(40, 167, 69, 0.7)', 'rgba(54, 162, 235, 0.7)', 'rgba(255, 206, 86, 0.7)', 'rgba(255, 159, 64, 0.7)', 'rgba(255, 99, 132, 0.7)'],
+                                        borderColor: '#fff',
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: { legend: { position: 'top' }, title: { display: true, text: 'Student Performance Distribution' } }
+                                }
+                            });
+                        </script>
+                    </div> 
+                </div> 
+            </div>
+        </form>
+    
+    </div> </body>
+</html>
