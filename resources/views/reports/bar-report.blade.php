@@ -5,17 +5,23 @@
     <title>BAR No. 1 - Quarterly Physical Report</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f4f4; }
+        
+        /* SIDEBAR STYLE (Kahit naka-include, need pa rin ng CSS dito kung hindi global) */
         .sidebar { position: fixed; left: 0; top: 0; width: 260px; height: 100vh; background-color: #2c3e50; padding: 20px; box-sizing: border-box; color: white; overflow-y: auto; }
         .sidebar h3 { text-align: center; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 10px; }
         .sidebar a { display: block; color: #ecf0f1; text-decoration: none; padding: 15px; border-radius: 5px; margin-bottom: 10px; font-weight: bold; }
         .sidebar a:hover { background-color: #34495e; }
         .sidebar a.active { background-color: #007bff; color: white; }
-        .main-content { margin-left: 260px; padding: 20px; }
+        /* Submenu styles */
+        .submenu a { padding-left: 30px !important; font-size: 0.9em; background-color: #233342; }
         
+        /* CONTENT STYLE */
+        .main-content { margin-left: 260px; padding: 20px; }
         .report-container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow-x: auto; }
         h2 { text-align: center; margin-bottom: 5px; color: #333; }
         h4 { text-align: center; margin-top: 0; color: #666; }
         
+        /* TABLE STYLE */
         table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; }
         th, td { border: 1px solid #333; padding: 8px; }
         th { background-color: #d9e2f3; font-weight: bold; vertical-align: middle; }
@@ -23,7 +29,7 @@
         .total-col { font-weight: bold; background-color: #f0f0f0; }
         .variance-col { font-weight: bold; color: #d9534f; }
         
-        /* Style para sa Edit Button */
+        /* Edit Button */
         .edit-btn {
             background-color: #007bff; 
             color: white; 
@@ -38,19 +44,7 @@
 </head>
 <body>
 
-    <div class="sidebar">
-        <h3>NAS M&E System</h3>
-        <a href="{{ route('main.dashboard') }}">Main Dashboard</a>
-        <hr style="border-color: #444;">
-        <a href="{{ route('reports.create') }}">OC-1: Learning Standards</a>
-        <a href="{{ route('reports.create-retention') }}">OC-2: Retention Rate</a>
-        <a href="{{ route('reports.create-medals') }}">OC-3: Medal Tally</a>
-        <a href="{{ route('reports.create-athletes-trained') }}">OP-2: Athletes Trained</a>
-        <a href="{{ route('reports.create-program') }}">OP-1: Programs</a>
-        <a href="{{ route('reports.create-facility') }}">OP-3: Facilities</a>
-        <hr style="border-color: #444;">
-        <a href="{{ route('reports.bar-report') }}" class="active" style="color: #ffd700;">BAR No. 1 Report</a>
-    </div>
+    @include('reports.sidebar')
 
     <div class="main-content">
         <div class="report-container">

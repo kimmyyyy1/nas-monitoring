@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>OP No. 2 - Athletes Trained (Form & Dashboard)</title>
+    <title>OC-3.2 International Medal Entry</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
@@ -14,22 +14,16 @@
         .sidebar a { display: block; color: #ecf0f1; text-decoration: none; padding: 15px; border-radius: 5px; margin-bottom: 10px; font-weight: bold; }
         .sidebar a:hover { background-color: #34495e; }
         .sidebar a.active { background-color: #007bff; color: white; }
-        /* Submenu styles */
-        .submenu a { padding-left: 30px !important; font-size: 0.9em; background-color: #233342; }
-
-        /* MAIN CONTENT */
+        
+        /* MAIN LAYOUT */
         .main-content { margin-left: 260px; padding: 20px; }
         h2 { color: #333; text-align: center; }
         .page-container { display: flex; gap: 20px; max-width: 1600px; margin: auto; }
         
-        /* COLUMNS */
         .form-column { flex: 2; min-width: 500px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; }
         .graph-column { flex: 1; min-width: 400px; }
-        
-        /* STICKY */
         .sticky-wrapper { position: sticky; top: 20px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
-        /* FORM ELEMENTS */
         form { padding: 0; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-group { display: flex; flex-direction: column; }
@@ -37,26 +31,22 @@
         .form-group select, .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         .grid-header { grid-column: 1 / -1; margin-top: 20px; margin-bottom: 0; padding-bottom: 10px; border-bottom: 2px solid #007bff; color: #0056b3; }
         
-        /* ALERTS */
         .success-message { grid-column: 1 / -1; padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; }
         @if ($errors->any())
         .success-message { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
         @endif
         
-        /* DASHBOARD ELEMENTS */
         .sticky-wrapper h3 { margin-top: 0; }
         .filters { background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
         .filters select { padding: 8px; font-size: 16px; width: 100%; margin-bottom: 10px; }
-        .chart-container { width: 100%; max-width: 400px; margin: 20px auto 0 auto; }
+        .chart-container { width: 100%; max-width: 500px; margin: 20px auto 0 auto; }
         
         .scorecards { display: flex; gap: 20px; width: 100%; }
         .card { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 20px; flex: 1; text-align: center; }
         .card h3 { margin-top: 0; color: #555; font-size: 1em; }
         .card .number { font-size: 2.5em; font-weight: bold; }
-        .card .number.blue { color: #007bff; }
         .card .number.red { color: #dc3545; }
         
-        /* BUTTON */
         .submit-button-sticky { width: 100%; padding: 12px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; }
         .submit-button-sticky:hover { background-color: #218838; }
     </style>
@@ -67,9 +57,9 @@
 
     <div class="main-content">
 
-        <h2>OP No. 2: Athletes Trained (Entry & Monitoring)</h2>
+        <h2>OC-3.2: International Medal Entry</h2>
 
-        <form action="{{ route('reports.store-athletes-trained') }}" method="POST">
+        <form action="{{ route('medals.international.store') }}" method="POST">
             @csrf
             
             <div class="page-container">
@@ -95,10 +85,10 @@
                             <label for="quarter">Quarter:</label>
                             <select name="quarter" id="quarter" required>
                                 <option value="">Select Quarter</option>
-                                <option value="Q1">Q1</option>
-                                <option value="Q2">Q2</option>
-                                <option value="Q3">Q3</option>
-                                <option value="Q4">Q4</option>
+                                <option value="1st Quarter">1st Quarter</option>
+                                <option value="2nd Quarter">2nd Quarter</option>
+                                <option value="3rd Quarter">3rd Quarter</option>
+                                <option value="4th Quarter">4th Quarter</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -111,8 +101,7 @@
                                 <option value="Grade 10">Grade 10</option>
                             </select>
                         </div>
-
-                        <div class="form-group" style="grid-column: 1 / -1;">
+                        <div class="form-group">
                             <label for="focus_sports">Focus Sports:</label>
                             <select name="focus_sports" id="focus_sports" required>
                                 <option value="">Select Sports</option>
@@ -126,63 +115,44 @@
                             </select>
                         </div>
 
-                        <h3 class="grid-header">Number of Athletes Trained</h3>
-                        <div class="form-group">
-                            <label for="male_count">Male Count:</label>
-                            <input type="number" name="male_count" id="male_count" value="0" min="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="female_count">Female Count:</label>
-                            <input type="number" name="female_count" id="female_count" value="0" min="0" required>
-                        </div>
+                        <h3 class="grid-header">International Competition Medals</h3>
+                        <div class="form-group"><label for="international_gold">Gold Medals:</label><input type="number" name="international_gold" id="international_gold" value="0" min="0" required></div>
+                        <div class="form-group"><label for="international_silver">Silver Medals:</label><input type="number" name="international_silver" id="international_silver" value="0" min="0" required></div>
+                        <div class="form-group"><label for="international_bronze">Bronze Medals:</label><input type="number" name="international_bronze" id="international_bronze" value="0" min="0" required></div>
 
                     </div>
                 </div>
 
                 <div class="graph-column">
                     <div class="sticky-wrapper">
-                        <h3>Trained Athletes Statistics</h3>
+                        <h3>International Statistics</h3>
                         
                         <div class="filters">
-                            <label for="quarter_filter" style="font-weight: bold;">Filter by Quarter:</label>
+                            <label style="font-weight: bold;">Filters:</label>
                             <select id="quarter_filter" onchange="applyFilters()">
                                 <option value="">All Quarters</option>
                                 @foreach ($quarters as $q)
-                                    <option value="{{ $q->quarter }}" {{ ($selectedQuarter == $q->quarter) ? 'selected' : '' }}>
-                                        {{ $q->quarter }}
-                                    </option>
+                                    <option value="{{ $q->quarter }}" {{ ($selectedQuarter == $q->quarter) ? 'selected' : '' }}>{{ $q->quarter }}</option>
                                 @endforeach
                             </select>
-
-                            <label for="grade_level_filter" style="font-weight: bold;">Filter by Grade Level:</label>
                             <select id="grade_level_filter" onchange="applyFilters()">
                                 <option value="">All Grade Levels</option>
                                 @foreach ($gradeLevels as $g)
-                                    <option value="{{ $g->grade_level }}" {{ ($selectedGrade == $g->grade_level) ? 'selected' : '' }}>
-                                        {{ $g->grade_level }}
-                                    </option>
+                                    <option value="{{ $g->grade_level }}" {{ ($selectedGrade == $g->grade_level) ? 'selected' : '' }}>{{ $g->grade_level }}</option>
                                 @endforeach
                             </select>
-                            
-                            <label for="focus_sports_filter" style="font-weight: bold;">Sports:</label>
                             <select id="focus_sports_filter" onchange="applyFilters()">
                                 <option value="">All Sports</option>
                                 @foreach ($sports as $s)
-                                    <option value="{{ $s->focus_sports }}" {{ ($selectedSport == $s->focus_sports) ? 'selected' : '' }}>
-                                        {{ $s->focus_sports }}
-                                    </option>
+                                    <option value="{{ $s->focus_sports }}" {{ ($selectedSport == $s->focus_sports) ? 'selected' : '' }}>{{ $s->focus_sports }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="scorecards">
                             <div class="card">
-                                <h3>Total Male</h3>
-                                <div class="number blue">{{ $total_male }}</div>
-                            </div>
-                            <div class="card">
-                                <h3>Total Female</h3>
-                                <div class="number red">{{ $total_female }}</div>
+                                <h3>Total International Medals</h3>
+                                <div class="number red">{{ $total_international }}</div>
                             </div>
                         </div>
 
@@ -190,35 +160,34 @@
                             <canvas id="myChart"></canvas>
                         </div>
                         
-                        <button type="submit" class="submit-button-sticky">Save Report</button>
+                        <button type="submit" class="submit-button-sticky">Save International Data</button>
                         
                         <script>
                             function applyFilters() {
                                 let quarter = document.getElementById('quarter_filter').value;
                                 let grade = document.getElementById('grade_level_filter').value;
                                 let sport = document.getElementById('focus_sports_filter').value;
-                                let url = `{{ route('reports.create-athletes-trained') }}?quarter=${encodeURIComponent(quarter)}&grade_level=${encodeURIComponent(grade)}&focus_sports=${encodeURIComponent(sport)}`;
+                                let url = `{{ route('medals.international.create') }}?quarter=${encodeURIComponent(quarter)}&grade_level=${encodeURIComponent(grade)}&focus_sports=${encodeURIComponent(sport)}`;
                                 window.location.href = url;
                             }
                         
-                            const chartData = @json($chartData);
+                            const chartData = @json($internationalData);
                             const ctx = document.getElementById('myChart').getContext('2d');
                             const myChart = new Chart(ctx, {
-                                type: 'bar', // Bar Chart
-                                data: { 
-                                    labels: chartData.labels, 
-                                    datasets: chartData.datasets 
+                                type: 'bar',
+                                data: {
+                                    labels: chartData.labels,
+                                    datasets: [{
+                                        label: 'International Medals',
+                                        data: chartData.data, 
+                                        backgroundColor: ['#FFD700', '#C0C0C0', '#CD7F32'], 
+                                        borderWidth: 1
+                                    }]
                                 },
                                 options: {
                                     responsive: true,
-                                    plugins: { 
-                                        legend: { position: 'top' }, 
-                                        title: { display: true, text: 'Trained Athletes by Sports' } 
-                                    },
-                                    scales: { 
-                                        x: { stacked: true },
-                                        y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Number of Athletes' } } 
-                                    }
+                                    plugins: { legend: { display: false }, title: { display: true, text: 'International Medal Breakdown' } },
+                                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
                                 }
                             });
                         </script>
@@ -227,5 +196,6 @@
             </div> 
         </form>
 
-    </div> </body>
+    </div> 
+</body>
 </html>

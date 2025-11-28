@@ -5,25 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-// I-import natin ang LAHAT ng 5 models na tapos na
+// Import lahat ng Models (Siguraduhin na nandito ang FacilityReport)
 use App\Models\LearningStandardReport;
 use App\Models\RetentionReport;
 use App\Models\MedalReport;
 use App\Models\AthletesTrainedReport;
 use App\Models\ProgramReport;
-// (Hindi pa kasama ang FacilityReport)
+use App\Models\FacilityReport; // <-- IMPORTANTE ITO
 
 class MainDashboardController extends Controller
 {
-    /**
-     * Ipakita ang Main Dashboard (Homepage)
-     */
     public function index()
     {
         // --- 1. Kunin ang Data para sa Scorecards ---
 
         // Total Programs (OP-1)
         $total_programs = ProgramReport::count();
+
+        // Total Facilities (OP-3) - ITO ANG NAWAWALA KANINA
+        $total_facilities = FacilityReport::count();
 
         // Total Athletes Trained (OP-2)
         $athletes_data = AthletesTrainedReport::select(
@@ -60,7 +60,7 @@ class MainDashboardController extends Controller
         $retention_rate = ($total_initial > 0) ? ($total_retained / $total_initial) * 100 : 0;
 
 
-        // --- 2. Kunin ang Data para sa Main Chart (OC-1 Performance) ---
+        // --- 2. Kunin ang Data para sa Main Chart (OC-1) ---
         $oc1_data = LearningStandardReport::select(
             DB::raw('COALESCE(SUM(outstanding_male), 0) as total_om'),
             DB::raw('COALESCE(SUM(outstanding_female), 0) as total_of'),
@@ -85,9 +85,10 @@ class MainDashboardController extends Controller
             ]
         ];
 
-        // --- 3. Ipasa lahat ng data sa bagong Main Dashboard view ---
+        // --- 3. Ipasa lahat sa view ---
         return view('main-dashboard', [
             'total_programs' => $total_programs,
+            'total_facilities' => $total_facilities, // <-- SIGURADUHING NANDITO ITO
             'total_athletes' => $total_athletes,
             'total_medals' => $total_medals,
             'retention_rate' => $retention_rate,

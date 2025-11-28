@@ -6,99 +6,86 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        /* --- BAGONG STYLES PARA SA SIDEBAR LAYOUT --- */
-        body { 
-            font-family: Arial, sans-serif; 
-            margin: 0; /* Alisin ang margin */
-            background-color: #f4f4f4; 
+        /* --- GLOBAL STYLES --- */
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f4f4; }
+        
+        /* --- SIDEBAR STYLES --- */
+        .sidebar { position: fixed; left: 0; top: 0; width: 260px; height: 100vh; background-color: #2c3e50; padding: 20px; box-sizing: border-box; color: white; overflow-y: auto; }
+        .sidebar h3 { text-align: center; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 10px; }
+        .sidebar a { display: block; color: #ecf0f1; text-decoration: none; padding: 15px; border-radius: 5px; margin-bottom: 10px; font-weight: bold; }
+        .sidebar a:hover { background-color: #34495e; }
+        .sidebar a.active { background-color: #007bff; color: white; }
+        /* Submenu styles handled in sidebar.blade.php inline styles/classes */
+
+        /* --- MAIN CONTENT LAYOUT --- */
+        .main-content { margin-left: 260px; padding: 20px; }
+        h2 { color: #333; text-align: center; }
+        
+        .page-container { display: flex; gap: 20px; max-width: 1600px; margin: auto; }
+        
+        /* --- COLUMNS --- */
+        .form-column { 
+            flex: 2; 
+            min-width: 500px; 
+            background-color: #fff; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            padding: 20px; 
+        }
+        .graph-column { 
+            flex: 1; 
+            min-width: 400px; 
         }
         
-        /* Ang Sidebar Menu */
-        .sidebar {
-            position: fixed; /* Mananatili ito kahit mag-scroll */
-            left: 0;
-            top: 0;
-            width: 260px; /* Lapad ng ating menu */
-            height: 100vh; /* Buong taas ng screen */
-            background-color: #2c3e50; /* Mas madilim na kulay */
-            padding: 20px;
-            box-sizing: border-box; /* Para 'wag lumagpas */
-            color: white;
-        }
-        .sidebar h3 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #444;
-            padding-bottom: 10px;
-        }
-        .sidebar a {
-            display: block;
-            color: #ecf0f1; /* Light na text */
-            text-decoration: none;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .sidebar a:hover {
-            background-color: #34495e;
-        }
-        /* Ito ang style para sa "active" na page */
-        .sidebar a.active {
-            background-color: #007bff; /* Blue */
-            color: white;
+        /* --- STICKY WRAPPER (Right Side) --- */
+        .sticky-wrapper { 
+            position: sticky; 
+            top: 20px; 
+            background-color: #fff; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
         }
 
-        /* Ang Main Content (Lahat ng nasa kanan ng sidebar) */
-        .main-content {
-            margin-left: 260px; /* I-offset natin para 'wag matakpan ng sidebar */
-            padding: 20px;
-        }
-        /* ----------------------------------------------- */
-
-        h2 { color: #333; text-align: center; }
-        .page-container { display: flex; gap: 20px; max-width: 100%; margin: auto; } /* 100% na ang width */
-        .form-column { flex: 2; min-width: 500px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; }
-        .graph-column { flex: 1; min-width: 400px; }
-        .sticky-wrapper { position: sticky; top: 20px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* --- FORM GRID --- */
         form { padding: 0; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-group { display: flex; flex-direction: column; }
         .form-group label { margin-bottom: 5px; font-weight: bold; color: #555; }
         .form-group select, .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         .grid-header { grid-column: 1 / -1; margin-top: 20px; margin-bottom: 0; padding-bottom: 10px; border-bottom: 2px solid #007bff; color: #0056b3; }
+        
+        /* --- ALERTS --- */
         .success-message { grid-column: 1 / -1; padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; }
         @if ($errors->any())
         .success-message { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
         @endif
+        
+        /* --- DASHBOARD ELEMENTS --- */
         .sticky-wrapper h3 { margin-top: 0; }
         .filters { background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .filters select, .filters label { padding: 8px; font-size: 16px; width: 100%; margin-bottom: 10px; }
+        .filters select { padding: 8px; font-size: 16px; width: 100%; margin-bottom: 10px; }
         .chart-container { width: 100%; max-width: 400px; margin: auto; }
-        .submit-button-sticky { width: 100%; padding: 12px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 20px; }
+        
+        /* --- BUTTON --- */
+        .submit-button-sticky { 
+            width: 100%; 
+            padding: 12px 15px; 
+            background-color: #28a745; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: bold; 
+            margin-top: 20px; 
+        }
         .submit-button-sticky:hover { background-color: #218838; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-    <h3>NAS M&E System</h3>
-    
-    <a href="{{ route('main.dashboard') }}" class="{{ request()->routeIs('main.dashboard') ? 'active' : '' }}">Main Dashboard</a> 
-    <hr style="border-color: #444;">
-    
-    <a href="{{ route('reports.create') }}" class="{{ request()->routeIs('reports.create') ? 'active' : '' }}">OC-1: Learning Standards</a>
-    <a href="{{ route('reports.create-retention') }}" class="{{ request()->routeIs('reports.create-retention') ? 'active' : '' }}">OC-2: Retention Rate</a>
-    <a href="{{ route('reports.create-medals') }}" class="{{ request()->routeIs('reports.create-medals') ? 'active' : '' }}">OC-3: Medal Tally</a>
-    
-    <a href="{{ route('reports.create-athletes-trained') }}" class="{{ request()->routeIs('reports.create-athletes-trained') ? 'active' : '' }}">OP-2: Athletes Trained</a>
-    <a href="{{ route('reports.create-program') }}" class="{{ request()->routeIs('reports.create-program') ? 'active' : '' }}">OP-1: Programs</a>
-    <a href="{{ route('reports.create-facility') }}" class="{{ request()->routeIs('reports.create-facility') ? 'active' : '' }}">OP-3: Facilities</a>
-    
-    <hr style="border-color: #444;">
-    <a href="{{ route('reports.bar-report') }}" class="{{ request()->routeIs('reports.bar-report') ? 'active' : '' }}" style="color: #ffd700;">BAR No. 1 Report</a>
-</div>
+    @include('reports.sidebar')
 
     <div class="main-content">
 
@@ -149,20 +136,24 @@
                         </div>
 
                         <h3 class="grid-header">Outstanding (90-100)</h3>
-                        <div class="form-group"><label for="outstanding_male">Male Count:</label><input type="number" name="outstanding_male" id="outstanding_male" value="0" required></div>
-                        <div class="form-group"><label for="outstanding_female">Female Count:</label><input type="number" name="outstanding_female" id="outstanding_female" value="0" required></div>
+                        <div class="form-group"><label for="outstanding_male">Male Count:</label><input type="number" name="outstanding_male" id="outstanding_male" value="0" min="0" required></div>
+                        <div class="form-group"><label for="outstanding_female">Female Count:</label><input type="number" name="outstanding_female" id="outstanding_female" value="0" min="0" required></div>
+
                         <h3 class="grid-header">Very Satisfactory (85-89)</h3>
-                        <div class="form-group"><label for="very_satisfactory_male">Male Count:</label><input type="number" name="very_satisfactory_male" id="very_satisfactory_male" value="0" required></div>
-                        <div class="form-group"><label for="very_satisfactory_female">Female Count:</label><input type="number" name="very_satisfactory_female" id="very_satisfactory_female" value="0" required></div>
+                        <div class="form-group"><label for="very_satisfactory_male">Male Count:</label><input type="number" name="very_satisfactory_male" id="very_satisfactory_male" value="0" min="0" required></div>
+                        <div class="form-group"><label for="very_satisfactory_female">Female Count:</label><input type="number" name="very_satisfactory_female" id="very_satisfactory_female" value="0" min="0" required></div>
+
                         <h3 class="grid-header">Satisfactory (80-84)</h3>
-                        <div class="form-group"><label for="satisfactory_male">Male Count:</label><input type="number" name="satisfactory_male" id="satisfactory_male" value="0" required></div>
-                        <div class="form-group"><label for="satisfactory_female">Female Count:</label><input type="number" name="satisfactory_female" id="satisfactory_female" value="0" required></div>
+                        <div class="form-group"><label for="satisfactory_male">Male Count:</label><input type="number" name="satisfactory_male" id="satisfactory_male" value="0" min="0" required></div>
+                        <div class="form-group"><label for="satisfactory_female">Female Count:</label><input type="number" name="satisfactory_female" id="satisfactory_female" value="0" min="0" required></div>
+
                         <h3 class="grid-header">Fairly Satisfactory (75-79)</h3>
-                        <div class="form-group"><label for="fairly_satisfactory_male">Male Count:</label><input type="number" name="fairly_satisfactory_male" id="fairly_satisfactory_male" value="0" required></div>
-                        <div class="form-group"><label for="fairly_satisfactory_female">Female Count:</label><input type="number" name="fairly_satisfactory_female" id="fairly_satisfactory_female" value="0" required></div>
+                        <div class="form-group"><label for="fairly_satisfactory_male">Male Count:</label><input type="number" name="fairly_satisfactory_male" id="fairly_satisfactory_male" value="0" min="0" required></div>
+                        <div class="form-group"><label for="fairly_satisfactory_female">Female Count:</label><input type="number" name="fairly_satisfactory_female" id="fairly_satisfactory_female" value="0" min="0" required></div>
+
                         <h3 class="grid-header">Did not Meet Expectations (74 and below)</h3>
-                        <div class="form-group"><label for="did_not_meet_male">Male Count:</label><input type="number" name="did_not_meet_male" id="did_not_meet_male" value="0" required></div>
-                        <div class="form-group"><label for="did_not_meet_female">Female Count:</label><input type="number" name="did_not_meet_female" id="did_not_meet_female" value="0" required></div>
+                        <div class="form-group"><label for="did_not_meet_male">Male Count:</label><input type="number" name="did_not_meet_male" id="did_not_meet_male" value="0" min="0" required></div>
+                        <div class="form-group"><label for="did_not_meet_female">Female Count:</label><input type="number" name="did_not_meet_female" id="did_not_meet_female" value="0" min="0" required></div>
                         
                     </div>
                 </div>
@@ -200,13 +191,16 @@
                         <button type="submit" class="submit-button-sticky">Save Report</button>
                         
                         <script>
+                            // Filter Logic
                             function applyFilters() {
                                 let quarter = document.getElementById('quarter_filter').value;
                                 let grade = document.getElementById('grade_level_filter').value;
+                                // Redirect sa parehong page pero may GET parameters
                                 let url = `{{ route('reports.create') }}?quarter=${encodeURIComponent(quarter)}&grade_level=${encodeURIComponent(grade)}`;
                                 window.location.href = url;
                             }
                         
+                            // Chart Logic
                             const chartData = @json($chartData);
                             const ctx = document.getElementById('myChart').getContext('2d');
                             const myChart = new Chart(ctx, {
@@ -216,14 +210,23 @@
                                     datasets: [{
                                         label: 'Number of Students',
                                         data: chartData.data,
-                                        backgroundColor: ['rgba(40, 167, 69, 0.7)', 'rgba(54, 162, 235, 0.7)', 'rgba(255, 206, 86, 0.7)', 'rgba(255, 159, 64, 0.7)', 'rgba(255, 99, 132, 0.7)'],
+                                        backgroundColor: [
+                                            'rgba(40, 167, 69, 0.7)',  // Green
+                                            'rgba(54, 162, 235, 0.7)', // Blue
+                                            'rgba(255, 206, 86, 0.7)', // Yellow
+                                            'rgba(255, 159, 64, 0.7)', // Orange
+                                            'rgba(255, 99, 132, 0.7)'  // Red
+                                        ],
                                         borderColor: '#fff',
                                         borderWidth: 1
                                     }]
                                 },
                                 options: {
                                     responsive: true,
-                                    plugins: { legend: { position: 'top' }, title: { display: true, text: 'Student Performance Distribution' } }
+                                    plugins: { 
+                                        legend: { position: 'top' }, 
+                                        title: { display: true, text: 'Student Performance Distribution' } 
+                                    }
                                 }
                             });
                         </script>
